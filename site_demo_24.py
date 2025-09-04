@@ -198,7 +198,7 @@ with st.container():
 
             The AI model is penalized if its predictions violate the laws of physics. The result is a model that not only fits the data but is also **consistent with the process reality**, as the animation below illustrates.
             """)
-            st.image("pinn_animation.gif")
+            st.image("pinn_vs_nn_extrapolation2.gif")
         st.markdown('</div>', unsafe_allow_html=True)
         
     st.markdown('</div>', unsafe_allow_html=True)
@@ -291,6 +291,7 @@ with v_col2:
 
 
 st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 
