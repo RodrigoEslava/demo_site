@@ -11,37 +11,53 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. Custom CSS for Styling ---
+# --- 2. Custom CSS for Styling (MODIFIED FOR DARK MODE) ---
 st.markdown("""
 <style>
     /* CSS Geral */
     .block-container { padding-top: 2rem; }
     .main-content-container { max-width: 1100px; margin: auto; }
     
-    /* CSS dos Cards de Projeto */
-    .project-card { background-color: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 10px; padding: 25px; height: 100%; }
-    .project-card:hover { border-color: #CCCCCC; box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
-    .project-title { font-size: 1.5rem; font-weight: 600; color: #333333; margin-bottom: 1rem; }
+    /* CSS dos Cards de Projeto (AGORA COMPATÍVEL COM DARK MODE) */
+    .project-card { 
+        background-color: var(--secondary-background-color); /* Usa a cor de fundo secundária do tema */
+        border: 1px solid var(--gray-200);
+        border-radius: 10px; 
+        padding: 25px; 
+        height: 100%; 
+    }
+    .project-card:hover { 
+        border-color: var(--gray-400); 
+        box-shadow: 0 8px 24px rgba(0,0,0,0.07); 
+    }
+    .project-title { 
+        font-size: 1.5rem; 
+        font-weight: 600; 
+        color: var(--text-color); /* Usa a cor de texto principal do tema */
+        margin-bottom: 1rem; 
+    }
     .metric-number { font-size: 2.2rem; font-weight: bold; color: #00A98F; }
-    h3 { font-weight: 600; color: #555555; }
-
-    /* CSS dos Botões de Prompt */
-    .stButton>button { background-color: #FFFFFF; border: 1px solid #00A98F; color: #00A98F; font-weight: bold; }
-    .stButton>button:hover { border: 1px solid #007A68; color: #007A68; }
-
-    /* CSS PARA OS CARDS DE RESPOSTA DO CHAT */
-    .response-card {
-        background-color: #FFFFFF;
-        border: 1px solid #EAEAEA;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 10px;
+    h3 { 
+        font-weight: 600; 
+        color: var(--text-color); /* Usa a cor de texto principal do tema */
     }
 
-    /* CSS PARA OS CARDS DA SEÇÃO DE VISÃO */
+    /* CSS dos Botões de Prompt (AGORA COMPATÍVEL COM DARK MODE) */
+    .stButton>button { 
+        background-color: var(--secondary-background-color); /* Fundo do botão acompanha o tema */
+        border: 1px solid #00A98F; 
+        color: #00A98F; 
+        font-weight: bold; 
+    }
+    .stButton>button:hover { 
+        border: 1px solid #007A68; 
+        color: #007A68; 
+    }
+
+    /* CSS PARA OS CARDS DA SEÇÃO DE VISÃO (AGORA COMPATÍVEL COM DARK MODE) */
     .vision-card {
-        background-color: #F8F9FA;
-        border: 1px solid #EAEAEA;
+        background-color: var(--secondary-background-color);
+        border: 1px solid var(--gray-200);
         border-radius: 10px;
         padding: 20px;
         height: 100%;
@@ -49,8 +65,11 @@ st.markdown("""
     }
     .vision-card h4 {
         font-weight: 600;
-        color: #333333;
+        color: var(--text-color);
         margin-top: 10px;
+    }
+    .vision-card p {
+        color: var(--text-color);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -137,11 +156,11 @@ with st.container():
     # --- A. Hero Section ---
     st.title("Rodrigo Eslava")
     st.caption("Developed by Rodrigo Eslava")
-    st.header("Beyond Dashboards: A Strategy to Solve the Hidden Pains in Industrial Data")
+    st.header("Beyond Dashboards: A Strategy to Address the Pain Points of Industrial Data")
     st.markdown("""
     Welcome,
 
-    While dashboards are essential, they often only scratch the surface of what's possible with industrial data. The true challenge—and the 'hidden pain' for many operators and engineers—is the gap between simply seeing data and scaling intelligence across an entire facility.
+    While dashboards are essential, they often only scratch the surface of what is possible with industrial data. The true challenge, and the 'hidden pain' for many operators and engineers, is bridging the gap between simply viewing data and scaling intelligence across an entire facility.
 
     Below, I've provided two practical examples of how I've used Seeq to turn industrial data into measurable impact, followed by my vision for how we can tackle the next generation of industrial data challenges.
     """)
@@ -164,12 +183,21 @@ with st.container():
     with col2:
         st.markdown('<div class="project-card">', unsafe_allow_html=True)
         st.markdown('<h2 class="project-title">🧪 Soft Sensor & Digital Twin</h2>', unsafe_allow_html=True)
-        st.markdown("<h3>Challenge:</h3> <p>To predict a product quality (acid number) in real-time for a fast process with scarce lab data and imprecise measurements.</p>", unsafe_allow_html=True)
+        st.markdown("<h3>Challenge:</h3> <p>To predict product quality (acid number) in real time for a fast process with scarce lab data and imprecise measurements.</p>", unsafe_allow_html=True)
         st.markdown("<h3>My Solution with Seeq:</h3> <p>I developed a hybrid model combining a phenomenological model (mass balance) with a <b>Physics-Informed Neural Network (PINN)</b> to create a reactor Digital Twin, integrated into the Seeq environment.</p>", unsafe_allow_html=True)
         st.markdown("<h3>Impact:</h3>", unsafe_allow_html=True)
         st.markdown(f'<p class="metric-number">$350k/year</p>', unsafe_allow_html=True)
         st.markdown("<p>in reduced off-spec product losses. A scalable solution for other sulfation units.</p>", unsafe_allow_html=True)
-        with st.expander("See (in motion) why the PINN approach was crucial"):
+        with st.expander("The following example illustrates why the PINN approach was crucial"):
+            st.markdown("""
+            In the Soft Sensor project, lab data was sparse (one sample per hour for a process of minutes). A standard Neural Network (NN) or XGBoost would struggle to predict what occurs between samples, potentially leading to incorrect conclusions.
+
+            The solution was to use a **PINN**, which combines two sources of information:
+            1.  **Process Data:** The few measurement points we had.
+            2.  **Laws of Physics:** The mass balance equations of the reactor.
+
+            The AI model is penalized if its predictions violate the laws of physics. The result is a model that not only fits the data but is also **consistent with the process reality**, as the animation below illustrates.
+            """)
             st.image("pinn_animation.gif")
         st.markdown('</div>', unsafe_allow_html=True)
         
@@ -182,7 +210,7 @@ st.markdown('<div class="main-content-container">', unsafe_allow_html=True)
 st.markdown("---")
 st.header("MVP: A Conceptual Demonstration")
 st.markdown("""
-This is a **conceptual demonstration** that illustrates a core vision: solving the pain of data that lacks context. In many plants, even when data is collected in one place, it isn't truly connected—a pressure reading doesn't 'know' its own maintenance history. This demo shows how Generative AI **could** build those relationships, enabling an engineer to 'talk' to their plant and get instant answers.
+This is a **conceptual demonstration** that illustrates a core vision: solving the pain of data that lacks context. In many plants, even when data is collected in one place, it is not truly connected, for example, a pressure reading does not ‘know’ its own maintenance history. This demo shows how Generative AI **could** build those relationships, enabling an engineer to 'talk' to their plant and get instant answers.
 """)
 st.info("This is a guided demonstration. Click the button that appears at each step to continue the conversation.", icon="👇")
 
@@ -248,7 +276,7 @@ with v_col1:
     <div class="vision-card">
         <h2>🚀</h2>
         <h4>Scalable AI Models</h4>
-        <p>Move beyond slow, one-off projects. My vision is to create foundational models for asset classes that can be rapidly <b>fine-tuned</b> to fit specific assets. A perfect application is developing predictive maintenance templates for <b>motor vibration signals</b>: a model is trained on an initial pump, and then rapidly deployed to all other similar pumps in a unit. This approach automates deployment and empowers customers to scale advanced analytics across their entire plant.</p>
+        <p>Move beyond slow, one-off projects toward scalable deployment. My vision is to create foundational models for asset classes that can be rapidly <b>fine-tuned</b> to fit specific assets. A perfect application is developing predictive maintenance templates for <b>motor vibration signals</b>: a model is trained on an initial pump, and then rapidly deployed to all other similar pumps in a unit. This approach automates deployment and empowers customers to scale advanced analytics across their entire plant.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -257,7 +285,7 @@ with v_col2:
     <div class="vision-card">
         <h2>🧠</h2>
         <h4>Industrial Knowledge Partner</h4>
-        <p>Bridge the critical "context gap" where engineers waste hours searching for information. My goal is to evolve the MVP into a full <b>knowledge partner</b> that connects siloed data—tags, manuals, P&IDs, and logs—into a single, conversational interface, making the plant's collective knowledge instantly accessible.</p>
+        <p>Bridge the critical "context gap" where engineers waste hours searching for information. My goal is to evolve the MVP into a full <b>knowledge partner</b> that connects siloed data tags, manuals, P&IDs, and logs—into a single, conversational interface, making the plant's collective knowledge instantly accessible.</p>
     </div>
     """, unsafe_allow_html=True)
 
